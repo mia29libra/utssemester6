@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pemasukan,Pengeluaran
+from .models import Pemasukan,Pengeluaran, laporankeuangan
 
 class PemasukanSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,4 +9,9 @@ class PemasukanSerializer(serializers.ModelSerializer):
 class PengeluaranSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pengeluaran
+        fields = '__all__'
+
+class laporankeuanganSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = laporankeuangan
         fields = '__all__'
