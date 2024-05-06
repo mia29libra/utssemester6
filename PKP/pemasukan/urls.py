@@ -5,6 +5,6 @@ from .views import PemasukanViewSet, PengeluaranViewSet, laporankeuanganViewSet
 router = DefaultRouter()
 router.register(r'pemasukan', PemasukanViewSet)
 router.register(r'pengeluaran', PengeluaranViewSet)
-router.register(r'pengeluaran', laporankeuanganViewSet)
+router.register(r'laporankeuangan', laporankeuanganViewSet)
 
 urlpatterns = router.urls
