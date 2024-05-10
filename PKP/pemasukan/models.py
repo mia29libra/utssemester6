@@ -10,6 +10,7 @@ class Pemasukan(models.Model):
         return self.tgl_Pemasukan
     
 class Pengeluaran(models.Model):
+    Pemasukan = models.ForeignKey(Pemasukan, related_name="Pengeluaran", on_delete=models.CASCADE)
     tgl_Pengeluaran = models.CharField(max_length=100)
     belanja_bulanan= models.CharField(max_length=10, unique=True)
     tagihan = models.CharField(max_length=10, unique=True)
