@@ -12,8 +12,8 @@ from .serializers import PemasukanSerializer, PengeluaranSerializer
 def Pemasukan_list(request, format=None):
 
     if request.method == 'GET':
-        Pemasukan = Pemasukan.objects.all()
-        serializer = PemasukanSerializer(Pemasukan, many=True)
+        pemasukan = Pemasukan.objects.all()
+        serializer = PemasukanSerializer(pemasukan, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
