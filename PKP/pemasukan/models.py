@@ -20,7 +20,7 @@ class Pengeluaran(models.Model):
     def __str__(self):
         return self.tgl_Pengeluaran
     
-class laporankeuangan(models.Model):
+class Laporankeuangan(models.Model):
     total_pemasukan = models.CharField(max_length=100)
     total_pengeluaran= models.CharField(max_length=10, unique=True)
     saldo_akhir = models.CharField(max_length=10, unique=True)

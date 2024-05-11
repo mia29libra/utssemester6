@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pemasukan,Pengeluaran, laporankeuangan
+from .models import Pemasukan,Pengeluaran,Laporankeuangan
 
 class PemasukanSerializer(serializers.ModelSerializer):
     Pengeluaran = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -12,7 +12,7 @@ class PengeluaranSerializer(serializers.ModelSerializer):
         model = Pengeluaran
         fields = ["tgl_Pengeluaran", "belanja_bulanan", "tagihan", "pembelian_lainnya"]
 
-class laporankeuanganSerializer(serializers.ModelSerializer):
+class LaporankeuanganSerializer(serializers.ModelSerializer):
     class Meta:
-        model = laporankeuangan
+        model = Laporankeuangan
         fields = ["total_pemasukan", "total_pengeluaran", "saldo_akhir"]

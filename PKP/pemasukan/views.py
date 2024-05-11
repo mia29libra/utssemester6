@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.http import Http404
 from rest_framework.views import APIView
-from .models import Pemasukan, Pengeluaran
-from .serializers import PemasukanSerializer, PengeluaranSerializer
+from .models import Pemasukan, Pengeluaran, Laporankeuangan
+from .serializers import PemasukanSerializer, PengeluaranSerializer,LaporankeuanganSerializer
 
 # Create your views here.
 @api_view(['GET', 'POST']) # decorator
@@ -55,8 +55,8 @@ class PengeluaranList(APIView):
     """
     permission_classes = [permissions.AllowAny]
     def get(self, request, format=None):
-        Pengeluaran = Pengeluaran.objects.all()
-        serializer = PengeluaranSerializer(Pengeluaran, many=True)
+        pengeluaran = Pengeluaran.objects.all()
+        serializer = PengeluaranSerializer(pengeluaran, many=True)
         return Response(serializer.data)
     
     def post(self, request, format=None):
@@ -93,4 +93,46 @@ class PengeluaranDetail(APIView):
     def delete(self, request, pk, format=None):
         Pengeluaran = self.get_object(pk=pk)
         Pengeluaran.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    # Create your views here.
+@api_view(['GET', 'POST']) # decorator
+@permission_classes([permissions.AllowAny])
+def Laporankeuangan_list(request, format=None):
+
+    if request.method == 'GET':
+        laporankeuangan = Laporankeuangan.objects.all()
+        serializer = LaporankeuanganSerializer(laporankeuangan, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = LaporankeuanganSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def Laporankeuangan_detail(request, pk, format=None):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        laporankeuangan = Laporankeuangan.objects.get(pk=pk)
+    except laporankeuangan.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = LaporankeuanganSerializer(laporankeuangan)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = LaporankeuanganSerializer(laporankeuangan, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        laporankeuangan.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
