@@ -29,23 +29,23 @@ def Pemasukan_detail(request, pk, format=None):
     Retrieve, update or delete a code snippet.
     """
     try:
-        kategori = Pemasukan.objects.get(pk=pk)
+        Pemasukan = Pemasukan.objects.get(pk=pk)
     except Pemasukan.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PemasukanSerializer(kategori)
+        serializer = PemasukanSerializer(Pemasukan)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = PemasukanSerializer(kategori, data=request.data)
+        serializer = PemasukanSerializer(Pemasukan, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        kategori.delete()
+        Pemasukan.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 # view untuk produk dengan class base view
@@ -55,8 +55,8 @@ class PengeluaranList(APIView):
     """
     permission_classes = [permissions.AllowAny]
     def get(self, request, format=None):
-        produk = Pengeluaran.objects.all()
-        serializer = PengeluaranSerializer(produk, many=True)
+        Pengeluaran = Pengeluaran.objects.all()
+        serializer = PengeluaranSerializer(Pengeluaran, many=True)
         return Response(serializer.data)
     
     def post(self, request, format=None):
@@ -66,7 +66,7 @@ class PengeluaranList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ProdukDetail(APIView):
+class PengeluaranDetail(APIView):
     """
     ambil data, edit atau hapus data
     """
@@ -78,19 +78,19 @@ class ProdukDetail(APIView):
             raise Http404
         
     def get(self, request, pk, format=None):
-        produk = self.get_object(pk)
-        serializer = PengeluaranSerializer(produk)
+        Pengeluaran = self.get_object(pk)
+        serializer = PengeluaranSerializer(Pengeluaran)
         return Response(serializer.data)
     
     def put(self, request, pk, format=None):
-        produk = self.get_object(pk)
-        serializer = PengeluaranSerializer(produk, data=request.data)
+        Pengeluaran = self.get_object(pk)
+        serializer = PengeluaranSerializer(Pengeluaran, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk, format=None):
-        produk = self.get_object(pk=pk)
-        produk.delete()
+        Pengeluaran = self.get_object(pk=pk)
+        Pengeluaran.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
