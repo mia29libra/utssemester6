@@ -3,14 +3,13 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.http import Http404
 from rest_framework.views import APIView
-from .models import Pemasukan, Pengeluaran, Laporankeuangan
-from .serializers import PemasukanSerializer, PengeluaranSerializer,LaporankeuanganSerializer
+from .models import Pemasukan, Pengeluaran, LaporanKeuangan  # Ubah Laporankeuangan menjadi LaporanKeuangan
+from .serializers import PemasukanSerializer, PengeluaranSerializer, LaporanKeuanganSerializer  # Ubah LaporankeuanganSerializer menjadi LaporanKeuanganSerializer
 
 # Create your views here.
-@api_view(['GET', 'POST']) # decorator
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.AllowAny])
 def Pemasukan_list(request, format=None):
-
     if request.method == 'GET':
         pemasukan = Pemasukan.objects.all()
         serializer = PemasukanSerializer(pemasukan, many=True)
@@ -25,35 +24,29 @@ def Pemasukan_list(request, format=None):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def Pemasukan_detail(request, pk, format=None):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
-        Pemasukan = Pemasukan.objects.get(pk=pk)
+        pemasukan = Pemasukan.objects.get(pk=pk)
     except Pemasukan.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PemasukanSerializer(Pemasukan)
+        serializer = PemasukanSerializer(pemasukan)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = PemasukanSerializer(Pemasukan, data=request.data)
+        serializer = PemasukanSerializer(pemasukan, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        Pemasukan.delete()
+        pemasukan.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# view untuk produk dengan class base view
 class PengeluaranList(APIView):
-    """
-    ini merupakan proses pengambilan data atau simpan data
-    """
     permission_classes = [permissions.AllowAny]
+
     def get(self, request, format=None):
         pengeluaran = Pengeluaran.objects.all()
         serializer = PengeluaranSerializer(pengeluaran, many=True)
@@ -67,10 +60,8 @@ class PengeluaranList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PengeluaranDetail(APIView):
-    """
-    ambil data, edit atau hapus data
-    """
-    parser_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
+
     def get_object(self, pk):
         try:
             return Pengeluaran.objects.get(pk=pk)
@@ -78,35 +69,33 @@ class PengeluaranDetail(APIView):
             raise Http404
         
     def get(self, request, pk, format=None):
-        Pengeluaran = self.get_object(pk)
-        serializer = PengeluaranSerializer(Pengeluaran)
+        pengeluaran = self.get_object(pk)
+        serializer = PengeluaranSerializer(pengeluaran)
         return Response(serializer.data)
     
     def put(self, request, pk, format=None):
-        Pengeluaran = self.get_object(pk)
-        serializer = PengeluaranSerializer(Pengeluaran, data=request.data)
+        pengeluaran = self.get_object(pk)
+        serializer = PengeluaranSerializer(pengeluaran, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk, format=None):
-        Pengeluaran = self.get_object(pk=pk)
-        Pengeluaran.delete()
+        pengeluaran = self.get_object(pk=pk)
+        pengeluaran.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    # Create your views here.
-@api_view(['GET', 'POST']) # decorator
+
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.AllowAny])
 def Laporankeuangan_list(request, format=None):
-
     if request.method == 'GET':
-        laporankeuangan = Laporankeuangan.objects.all()
-        serializer = LaporankeuanganSerializer(laporankeuangan, many=True)
+        laporankeuangan = LaporanKeuangan.objects.all()  # Menggunakan LaporanKeuangan sesuai dengan definisi model
+        serializer = LaporanKeuanganSerializer(laporankeuangan, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = LaporankeuanganSerializer(data=request.data)
+        serializer = LaporanKeuanganSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -114,20 +103,17 @@ def Laporankeuangan_list(request, format=None):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def Laporankeuangan_detail(request, pk, format=None):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
-        laporankeuangan = Laporankeuangan.objects.get(pk=pk)
-    except laporankeuangan.DoesNotExist:
+        laporankeuangan = LaporanKeuangan.objects.get(pk=pk)  # Menggunakan LaporanKeuangan sesuai dengan definisi model
+    except LaporanKeuangan.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = LaporankeuanganSerializer(laporankeuangan)
+        serializer = LaporanKeuanganSerializer(laporankeuangan)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = LaporankeuanganSerializer(laporankeuangan, data=request.data)
+        serializer = LaporanKeuanganSerializer(laporankeuangan, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
